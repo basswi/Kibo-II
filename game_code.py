@@ -50,7 +50,7 @@ def main_menu():
     # variable to keep the main loop running
     running = True
     while running:
-        
+
         # look at every event in the queue
         for event in pygame.event.get():
 
