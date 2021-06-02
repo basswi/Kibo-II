@@ -44,3 +44,5 @@ while run:
             run = False
         pygame.display.update()
 pygame.quit()
+
+print("Test git")
