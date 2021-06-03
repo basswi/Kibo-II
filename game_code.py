@@ -108,6 +108,7 @@ while run:
     platform_3.platforms(289, 240, 62, 10)
     platform_4.platforms(370, 200, 120, 15)
     kibo_bg.bg_image()
+    main_menu()
 
 pygame.quit()
 
