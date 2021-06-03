@@ -12,7 +12,7 @@ pygame.init()
 pygame.font.init()
 font = pygame.font.SysFont("cambria", 20)
 
-
+print("SIEMANECZKO KOLEŻANKI")
 
 class Background:
     def __init__(self):
