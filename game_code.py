@@ -45,6 +45,33 @@ platform_2 = Background()
 platform_3 = Background()
 platform_4 = Background()
 
+class Physic:
+    def __init__(self, x, y, width, height, acc, max_vel):
+        self.h_velocity = 0
+        self.v_velocity = 0  #pion
+        self.acc = acc  #przyspieszenie
+        self.max_vel = max_vel
+        self.width = width
+        self.height = height
+        self.x_cord = x
+        self.y_cord = y
+        self.pre_x = x
+        self.pre_y = y
+
+    def physic_tick(self, grounds):
+        self.v_velocity += 0.7
+        self.hitbox = pygame.Rect(self.x_cord, self.y_cord, self.width, self.height)
+        self.x_cord += self.h_velocity
+        self.y_cord += self.v_velocity
+
+        for ground in grounds:
+            if ground.hitbox.colliderect(self.hitbox):
+                # self.x_cord = self.pre_x
+                self.y_cord =  self.pre_y
+                self.v_velocity = 0
+
+        self.pre_x = self.x_cord
+        self.pre_y = self.y_cord
 
 # define menu method with buttons
 def main_menu():
