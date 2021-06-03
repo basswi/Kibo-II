@@ -24,16 +24,18 @@ class Background:
         self.screen_height))
 
     def bg_image(self):
+        # set game window name
         pygame.display.set_caption("Kibo II")
+        # load image to create a background object
         self.background = pygame.image.load("forest.jpg")
         self.screen.blit(self.background, (0, 0))
-        # pygame.display.flip()
+        pygame.display.flip()
 
     def platforms(self, position_1, position_2, width, height):
         self.color = (255, 0, 0)
         self.platform = pygame.draw.rect(self.screen, self.color,
         pygame.Rect(position_1, position_2, width, height))
-        pygame.display.flip()
+        # pygame.display.flip()
 
 
 kibo_bg = Background()
