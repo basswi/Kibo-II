@@ -4,6 +4,8 @@ import pygame, sys
 from pygame.locals import (K_UP, K_DOWN, K_LEFT, K_RIGHT, K_ESCAPE, KEYDOWN, QUIT, MOUSEBUTTONDOWN)
 # import tkinter to create menu buttons
 from tkinter import *
+#importing mixer for sounds
+from pygame import mixer
 
 #initiating pygame
 pygame.init()
@@ -11,8 +13,6 @@ pygame.init()
 # choosing the style of the font for texts
 pygame.font.init()
 font = pygame.font.SysFont("cambria", 20)
-
-print("SIEMANECZKO KOLEŻANKI")
 
 class Background:
     def __init__(self):
