@@ -24,16 +24,18 @@ class Background:
         self.screen_height))
 
     def bg_image(self):
+        # set game window name
         pygame.display.set_caption("Kibo II")
+        # load image to create a background object
         self.background = pygame.image.load("forest.jpg")
         self.screen.blit(self.background, (0, 0))
-        # pygame.display.flip()
+        pygame.display.flip()
 
     def platforms(self, position_1, position_2, width, height):
         self.color = (255, 0, 0)
         self.platform = pygame.draw.rect(self.screen, self.color,
         pygame.Rect(position_1, position_2, width, height))
-        pygame.display.flip()
+        # pygame.display.flip()
 
 
 kibo_bg = Background()
@@ -43,6 +45,33 @@ platform_2 = Background()
 platform_3 = Background()
 platform_4 = Background()
 
+class Physic:
+    def __init__(self, x, y, width, height, acc, max_vel):
+        self.h_velocity = 0
+        self.v_velocity = 0  #pion
+        self.acc = acc  #przyspieszenie
+        self.max_vel = max_vel
+        self.width = width
+        self.height = height
+        self.x_cord = x
+        self.y_cord = y
+        self.pre_x = x
+        self.pre_y = y
+
+    def physic_tick(self, grounds):
+        self.v_velocity += 0.7
+        self.hitbox = pygame.Rect(self.x_cord, self.y_cord, self.width, self.height)
+        self.x_cord += self.h_velocity
+        self.y_cord += self.v_velocity
+
+        for ground in grounds:
+            if ground.hitbox.colliderect(self.hitbox):
+                # self.x_cord = self.pre_x
+                self.y_cord =  self.pre_y
+                self.v_velocity = 0
+
+        self.pre_x = self.x_cord
+        self.pre_y = self.y_cord
 
 # define menu method with buttons
 def main_menu():
@@ -81,3 +110,5 @@ while run:
     kibo_bg.bg_image()
 
 pygame.quit()
+
+print("Test git")
