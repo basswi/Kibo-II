@@ -154,17 +154,12 @@ while run:
     platform_3.platforms(289, 240, 62, 10)
     platform_4.platforms(370, 200, 120, 15)
     kibo_bg.bg_image()
-<<<<<<< HEAD
     keys = pygame.key.get_pressed()
     player.tick(keys, floors)
     player.draw()
     for floor in floors:
         floor.draw(window)
     pygame.display.update()
-=======
-    main_menu()
->>>>>>> a0956d96c04f1875cb8ec6a16613f276767c9d53
-
 pygame.quit()
 
 print("Test git")
