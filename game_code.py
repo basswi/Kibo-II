@@ -4,6 +4,8 @@ import pygame, sys
 from pygame.locals import (K_UP, K_DOWN, K_LEFT, K_RIGHT, K_ESCAPE, KEYDOWN, QUIT, MOUSEBUTTONDOWN)
 # import tkinter to create menu buttons
 from tkinter import *
+#importing mixer for sounds
+from pygame import mixer
 
 #initiating pygame
 pygame.init()
@@ -12,8 +14,6 @@ pygame.init()
 pygame.font.init()
 font = pygame.font.SysFont("cambria", 20)
 window = pygame.display.set_mode((500, 500))
-
-
 
 class Background:
     def __init__(self):
@@ -25,16 +25,18 @@ class Background:
         self.screen_height))
 
     def bg_image(self):
+        # set game window name
         pygame.display.set_caption("Kibo II")
+        # load image to create a background object
         self.background = pygame.image.load("forest.jpg")
         self.screen.blit(self.background, (0, 0))
-        # pygame.display.flip()
+        pygame.display.flip()
 
     def platforms(self, position_1, position_2, width, height):
         self.color = (255, 0, 0)
         self.platform = pygame.draw.rect(self.screen, self.color,
         pygame.Rect(position_1, position_2, width, height))
-        pygame.display.flip()
+        # pygame.display.flip()
 
 
 kibo_bg = Background()
@@ -152,11 +154,17 @@ while run:
     platform_3.platforms(289, 240, 62, 10)
     platform_4.platforms(370, 200, 120, 15)
     kibo_bg.bg_image()
+<<<<<<< HEAD
     keys = pygame.key.get_pressed()
     player.tick(keys, floors)
     player.draw()
     for floor in floors:
         floor.draw(window)
     pygame.display.update()
+=======
+    main_menu()
+>>>>>>> a0956d96c04f1875cb8ec6a16613f276767c9d53
 
 pygame.quit()
+
+print("Test git")
