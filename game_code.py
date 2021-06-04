@@ -11,6 +11,7 @@ pygame.init()
 # choosing the style of the font for texts
 pygame.font.init()
 font = pygame.font.SysFont("cambria", 20)
+window = pygame.display.set_mode((500, 500))
 
 
 
@@ -45,9 +46,9 @@ platform_4 = Background()
 
 class Physic:
     def __init__(self, x, y, width, height, acc, max_vel):
-        self.h_velocity = 0
-        self.v_velocity = 0  #pion
-        self.acc = acc  #przyspieszenie
+        self.h_velocity = 0  #horizontal velocity
+        self.v_velocity = 0  #vertical velocity
+        self.acc = acc
         self.max_vel = max_vel
         self.width = width
         self.height = height
@@ -56,20 +57,63 @@ class Physic:
         self.pre_x = x
         self.pre_y = y
 
-    def physic_tick(self, grounds):
-        self.v_velocity += 0.7
+    def physic_tick(self, floors):
+        self.v_velocity += 0.6
         self.hitbox = pygame.Rect(self.x_cord, self.y_cord, self.width, self.height)
         self.x_cord += self.h_velocity
         self.y_cord += self.v_velocity
-
-        for ground in grounds:
-            if ground.hitbox.colliderect(self.hitbox):
+        for floor in floors:
+            if floor.hitbox.colliderect(self.hitbox):
                 # self.x_cord = self.pre_x
                 self.y_cord =  self.pre_y
                 self.v_velocity = 0
 
         self.pre_x = self.x_cord
         self.pre_y = self.y_cord
+
+#adding the Player
+class Player(Physic):
+    def __init__(self):
+        self.image = pygame.image.load("ludek3.png")
+        width = self.image.get_width()
+        height = self.image.get_height()
+        super().__init__(30, 360, width, height, 0.5, 5)
+        self.speed = 4
+        self.h_velocity = 0
+        self.acc = 1
+        self.max_vel = 5 #maximum velocity
+
+    def tick(self, keys, floors):
+        self.physic_tick(floors)
+        if keys[pygame.K_LEFT] and self.h_velocity > self.max_vel * -1:
+            self.h_velocity -= self.acc
+        if keys[pygame.K_RIGHT] and self.h_velocity < self.max_vel:
+            self.h_velocity += self.acc
+        if not (keys[pygame.K_LEFT] or keys[pygame.K_RIGHT]):
+            if self.h_velocity > 0:
+                self.h_velocity -= self.acc
+            elif self.h_velocity < 0:
+                self.h_velocity += self.acc
+
+        self.x_cord += self.h_velocity
+        self.y_cord += self.v_velocity
+        self.hitbox = pygame.Rect(self.x_cord, self.y_cord, self.width, self.height)
+
+    def draw(self):
+        window.blit(self.image, (self.x_cord, self.y_cord))
+
+
+class Floor:
+    def __init__(self, x, y, width, height):
+        self.x_cord = x
+        self.y_cord = y
+        self.width = width
+        self.height = height
+        self.hitbox = pygame.Rect(self.x_cord, self.y_cord, self.width, self.height)
+
+    def draw(self, window):
+        pygame.draw.rect(window, (51, 40, 10), self.hitbox)
+
 
 # define menu method with buttons
 def main_menu():
@@ -99,6 +143,8 @@ def main_menu():
 
 # Main loop:
 run = True
+player = Player()
+floors = [Floor(20, 480, 760 , 8)]
 while run:
     ground.platforms(0, 470, 500, 30)
     platform_1.platforms(78, 370, 64, 10)
@@ -106,5 +152,11 @@ while run:
     platform_3.platforms(289, 240, 62, 10)
     platform_4.platforms(370, 200, 120, 15)
     kibo_bg.bg_image()
+    keys = pygame.key.get_pressed()
+    player.tick(keys, floors)
+    player.draw()
+    for floor in floors:
+        floor.draw(window)
+    pygame.display.update()
 
 pygame.quit()
