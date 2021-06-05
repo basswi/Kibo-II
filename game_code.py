@@ -28,22 +28,19 @@ class Background:
         pygame.display.set_caption("Kibo II")
         # load image to create a background object
         self.background = pygame.image.load("forest.jpg")
+        # get the image, position it at (0, 0) and draw it onto the screen
         self.screen.blit(self.background, (0, 0))
         pygame.display.flip()
 
     def platforms(self, position_1, position_2, width, height):
+        # define platform colour
         self.color = (255, 0, 0)
+        # draw the platform onto the screen
         self.platform = pygame.draw.rect(self.screen, self.color,
         pygame.Rect(position_1, position_2, width, height))
+        # use pygame.display.flip() to see the platforms
         # pygame.display.flip()
 
-
-kibo_bg = Background()
-ground = Background()
-platform_1 = Background()
-platform_2 = Background()
-platform_3 = Background()
-platform_4 = Background()
 
 class Physic:
     def __init__(self, x, y, width, height, acc, max_vel):
@@ -96,8 +93,12 @@ def main_menu():
                     sys.exit()
 
 
-
-
+kibo_bg = Background()
+ground = Background()
+platform_1 = Background()
+platform_2 = Background()
+platform_3 = Background()
+platform_4 = Background()
 
 # Main loop:
 run = True
@@ -111,5 +112,3 @@ while run:
     main_menu()
 
 pygame.quit()
-
-print("Test git")
