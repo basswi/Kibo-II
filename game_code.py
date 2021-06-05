@@ -13,6 +13,7 @@ pygame.init()
 # choosing the style of the font for texts
 pygame.font.init()
 font = pygame.font.SysFont("cambria", 20)
+window = pygame.display.set_mode((500, 500))
 
 class Background:
     def __init__(self):
@@ -45,30 +46,25 @@ class Background:
 class Physic:
     def __init__(self, x, y, width, height, acc, max_vel):
         self.h_velocity = 0
-        self.v_velocity = 0  #pion
-        self.acc = acc  #przyspieszenie
-        self.max_vel = max_vel
-        self.width = width
-        self.height = height
-        self.x_cord = x
-        self.y_cord = y
-        self.pre_x = x
-        self.pre_y = y
+        self.accel = 0.5
+        self.max_velocity = 3
 
-    def physic_tick(self, grounds):
-        self.v_velocity += 0.7
-        self.hitbox = pygame.Rect(self.x_cord, self.y_cord, self.width, self.height)
-        self.x_cord += self.h_velocity
-        self.y_cord += self.v_velocity
+    def tick(self, keys):
+        if keys[pygame.K_LEFT] and self.h_velocity > self.max_velocity * -1:
+            self.h_velocity -= self.accel
+        if keys[pygame.K_RIGHT] and self.h_velocity < self.max_velocity:
+            self.h_velocity += self.accel
+        if not (keys[pygame.K_LEFT] or keys[pygame.K_RIGHT]):
+            if self.h_velocity > 0:
+                self.h_velocity -= self.accel
+            elif self.h_velocity < 0:
+                self.h_velocity += self.accel
+        self.xcord += self.h_velocity
 
-        for ground in grounds:
-            if ground.hitbox.colliderect(self.hitbox):
-                # self.x_cord = self.pre_x
-                self.y_cord =  self.pre_y
-                self.v_velocity = 0
+    def draw(self):
+        window.blit(self.image, (self.xcord, self.ycord))
 
-        self.pre_x = self.x_cord
-        self.pre_y = self.y_cord
+
 
 # define menu method with buttons
 def main_menu():
