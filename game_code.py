@@ -46,6 +46,9 @@ platform_2 = Background()
 platform_3 = Background()
 platform_4 = Background()
 
+pygame.mixer.music.load("music.wav")
+pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0.3)
 
 
 #adding the Player
