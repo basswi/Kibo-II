@@ -107,12 +107,16 @@ def main():
         platform_3.platforms(289, 240, 62, 10)
         platform_4.platforms(370, 200, 120, 15)
         kibo_bg.bg_image()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
         keys = pygame.key.get_pressed()
         player.tick(keys)
         window.blit(background, (0, 0 ))
         player.draw()
         pygame.display.update()
-    # pygame.quit()
+
+    pygame.quit()
 
 if __name__ == "__main__":
     main()
