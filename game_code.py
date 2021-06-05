@@ -59,13 +59,21 @@ class Player:
         self.image = pygame.image.load("ludek3.png")
         self.width = self.image.get_width()
         self.height = self.image.get_height()
-        self.speed = 5
+        self.h_velocity = 0
+        self.accel = 0.5
+        self.max_velocity = 3
 
     def tick(self, keys):
-        if keys[pygame.K_LEFT]:
-            self.xcord -= self.speed
-        if keys[pygame.K_RIGHT]:
-            self.xcord += self.speed
+        if keys[pygame.K_LEFT] and self.h_velocity > self.max_velocity * -1:
+            self.h_velocity -= self.accel
+        if keys[pygame.K_RIGHT] and self.h_velocity < self.max_velocity:
+            self.h_velocity += self.accel
+        if not (keys[pygame.K_LEFT] or keys[pygame.K_RIGHT]):
+            if self.h_velocity > 0:
+                self.h_velocity -= self.accel
+            elif self.h_velocity < 0:
+                self.h_velocity += self.accel
+        self.xcord += self.h_velocity
 
     def draw(self):
         window.blit(self.image, (self.xcord, self.ycord))
