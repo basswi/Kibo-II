@@ -46,75 +46,27 @@ platform_2 = Background()
 platform_3 = Background()
 platform_4 = Background()
 
-class Physic:
-    def __init__(self, x, y, width, height, acc, max_vel):
-        self.h_velocity = 0  #horizontal velocity
-        self.v_velocity = 0  #vertical velocity
-        self.acc = acc
-        self.max_vel = max_vel
-        self.width = width
-        self.height = height
-        self.x_cord = x
-        self.y_cord = y
-        self.pre_x = x
-        self.pre_y = y
 
-    def physic_tick(self, floors):
-        self.v_velocity += 0.6
-        self.hitbox = pygame.Rect(self.x_cord, self.y_cord, self.width, self.height)
-        self.x_cord += self.h_velocity
-        self.y_cord += self.v_velocity
-        for floor in floors:
-            if floor.hitbox.colliderect(self.hitbox):
-                # self.x_cord = self.pre_x
-                self.y_cord =  self.pre_y
-                self.v_velocity = 0
-
-        self.pre_x = self.x_cord
-        self.pre_y = self.y_cord
 
 #adding the Player
-class Player(Physic):
+class Player:
     def __init__(self):
+        self.xcord = 20
+        self.ycord = 360
         self.image = pygame.image.load("ludek3.png")
-        width = self.image.get_width()
-        height = self.image.get_height()
-        super().__init__(30, 360, width, height, 0.5, 5)
-        self.speed = 4
-        self.h_velocity = 0
-        self.acc = 1
-        self.max_vel = 5 #maximum velocity
+        self.width = self.image.get_width()
+        self.height = self.image.get_height()
+        self.speed = 5
 
-    def tick(self, keys, floors):
-        self.physic_tick(floors)
-        if keys[pygame.K_LEFT] and self.h_velocity > self.max_vel * -1:
-            self.h_velocity -= self.acc
-        if keys[pygame.K_RIGHT] and self.h_velocity < self.max_vel:
-            self.h_velocity += self.acc
-        if not (keys[pygame.K_LEFT] or keys[pygame.K_RIGHT]):
-            if self.h_velocity > 0:
-                self.h_velocity -= self.acc
-            elif self.h_velocity < 0:
-                self.h_velocity += self.acc
-
-        self.x_cord += self.h_velocity
-        self.y_cord += self.v_velocity
-        self.hitbox = pygame.Rect(self.x_cord, self.y_cord, self.width, self.height)
+    def tick(self, keys):
+        if keys[pygame.K_LEFT]:
+            self.xcord -= self.speed
+        if keys[pygame.K_RIGHT]:
+            self.xcord += self.speed
 
     def draw(self):
-        window.blit(self.image, (self.x_cord, self.y_cord))
+        window.blit(self.image, (self.xcord, self.ycord))
 
-
-class Floor:
-    def __init__(self, x, y, width, height):
-        self.x_cord = x
-        self.y_cord = y
-        self.width = width
-        self.height = height
-        self.hitbox = pygame.Rect(self.x_cord, self.y_cord, self.width, self.height)
-
-    def draw(self, window):
-        pygame.draw.rect(window, (51, 40, 10), self.hitbox)
 
 
 # define menu method with buttons
@@ -144,22 +96,25 @@ def main_menu():
 
 
 # Main loop:
-run = True
-player = Player()
-floors = [Floor(20, 480, 760 , 8)]
-while run:
-    ground.platforms(0, 470, 500, 30)
-    platform_1.platforms(78, 370, 64, 10)
-    platform_2.platforms(182, 303, 75, 15)
-    platform_3.platforms(289, 240, 62, 10)
-    platform_4.platforms(370, 200, 120, 15)
-    kibo_bg.bg_image()
-    keys = pygame.key.get_pressed()
-    player.tick(keys, floors)
-    player.draw()
-    for floor in floors:
-        floor.draw(window)
-    pygame.display.update()
-pygame.quit()
+def main():
+    run = True
+    player = Player()
+    background = pygame.image.load("forest.jpg")
+    while run:
+        ground.platforms(0, 470, 500, 30)
+        platform_1.platforms(78, 370, 64, 10)
+        platform_2.platforms(182, 303, 75, 15)
+        platform_3.platforms(289, 240, 62, 10)
+        platform_4.platforms(370, 200, 120, 15)
+        kibo_bg.bg_image()
+        keys = pygame.key.get_pressed()
+        player.tick(keys)
+        window.blit(background, (0, 0 ))
+        player.draw()
+        pygame.display.update()
+    # pygame.quit()
+
+if __name__ == "__main__":
+    main()
 
 print("Test git")
