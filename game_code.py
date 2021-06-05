@@ -41,11 +41,15 @@ class Background:
         pygame.Rect(position_1, position_2, width, height))
         # use pygame.display.flip() to see the platforms
         # pygame.display.flip()
-
-
-class Physic:
-    def __init__(self, x, y, width, height, acc, max_vel):
-        self.h_velocity = 0
+class Player:
+    def __init__(self):
+        self.xcord = 20
+        self.ycord = 360
+        self.image = pygame.image.load("ludek3.png")
+        self.width = self.image.get_width()
+        self.height = self.image.get_height()
+        self.h_velocity = 0  #predkosc w poziomie
+        self.v_velocity = 0
         self.accel = 0.5
         self.max_velocity = 3
 
@@ -97,14 +101,27 @@ platform_3 = Background()
 platform_4 = Background()
 
 # Main loop:
-run = True
-while run:
-    ground.platforms(0, 470, 500, 30)
-    platform_1.platforms(78, 370, 64, 10)
-    platform_2.platforms(182, 303, 75, 15)
-    platform_3.platforms(289, 240, 62, 10)
-    platform_4.platforms(370, 200, 120, 15)
-    kibo_bg.bg_image()
-    main_menu()
+def main():
+    run = True
+    player = Player()
+    background = pygame.image.load("forest.jpg")
+    while run:
+        ground.platforms(0, 470, 500, 30)
+        platform_1.platforms(78, 370, 64, 10)
+        platform_2.platforms(182, 303, 75, 15)
+        platform_3.platforms(289, 240, 62, 10)
+        platform_4.platforms(370, 200, 120, 15)
+        kibo_bg.bg_image()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+        keys = pygame.key.get_pressed()
+        player.tick(keys)
+        window.blit(background, (0, 0 ))
+        player.draw()
+        pygame.display.update()
+
+if __name__ == "__main__":
+    main()
 
 pygame.quit()
