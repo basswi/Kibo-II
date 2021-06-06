@@ -151,15 +151,18 @@ def main():
 
 
 
+# calling the game
 def start_the_game():
     if __name__ == "__main__":
         main()
 
+# defining menu options
 main_menu = pygame_menu.Menu("Menu", 500, 500, theme=pygame_menu.themes.THEME_GREEN)
 main_menu.add.button("Zacznij grę", start_the_game)
-main_menu.add.button("Opcje")
 main_menu.add.selector("Poziom głośności:", [("Max",3),("2",2),("1",1),("0", 0)], onchange = volume.adjust_volume)
 main_menu.add.button("Wyjdź", pygame_menu.events.EXIT)
+
+# calling menu
 main_menu.mainloop(window)
 
 
