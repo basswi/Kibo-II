@@ -41,11 +41,13 @@ class Background:
         pygame.Rect(position_1, position_2, width, height))
         # use pygame.display.flip() to see the platforms
         # pygame.display.flip()
+
 class Player:
     def __init__(self):
         self.xcord = 20
         self.ycord = 360
-        self.image = pygame.image.load("ludek3.png")
+        self.image = pygame.image.load("ludzik-removebg.png")
+        self.image = pygame.transform.scale(self.image, (120, 120))
         self.width = self.image.get_width()
         self.height = self.image.get_height()
         self.h_velocity = 0  #predkosc w poziomie
