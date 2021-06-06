@@ -7,7 +7,7 @@ import pygame_menu
 #importing mixer for sounds
 from pygame import mixer
 #preset the mixer init arguments
-pygame.mixer.pre_init(frequency=44100, size=-16, channels=1, buffer=512)
+pygame.mixer.pre_init(frequency=44100, size=-16, channels=1, buffer=4096)
 
 #initiating pygame
 pygame.init()
@@ -61,20 +61,24 @@ class Player:
     def tick(self, keys):
         if keys[pygame.K_LEFT] and self.h_velocity > self.max_velocity * -1:
             self.h_velocity -= self.accel
+            step_sound.play(-1)
         if keys[pygame.K_RIGHT] and self.h_velocity < self.max_velocity:
             self.h_velocity += self.accel
+            step_sound.play(-1)
         if not (keys[pygame.K_LEFT] or keys[pygame.K_RIGHT]):
             if self.h_velocity > 0:
                 self.h_velocity -= self.accel
+                step_sound.stop()
             elif self.h_velocity < 0:
                 self.h_velocity += self.accel
+                step_sound.stop()
         self.xcord += self.h_velocity
 
     def draw(self):
         window.blit(self.image, (self.xcord, self.ycord))
 
 
-class Volume:
+class Music:
 
     def __init__(self):
         pygame.mixer.music.load("music.wav")
@@ -96,6 +100,9 @@ class Volume:
             pygame.mixer.music.unpause()
             pygame.mixer.music.set_volume(0.3)
 
+step_sound = pygame.mixer.Sound("steps.wav")
+step_sound.set_volume(0.1)
+
 # choosing the style of the font for texts
 pygame.font.init()
 font = pygame.font.SysFont("cambria", 20)
@@ -108,7 +115,7 @@ platform_1 = Background()
 platform_2 = Background()
 platform_3 = Background()
 platform_4 = Background()
-volume = Volume()
+volume = Music()
 
 
 # Main loop:
