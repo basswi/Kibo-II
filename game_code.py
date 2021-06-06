@@ -96,6 +96,9 @@ def main():
     player = Player()
     background = pygame.image.load("forest.jpg")
 
+    welcome = font.render("Witaj w świecie Kibo-II!", True, (0,0,0))
+    background.blit(welcome, (50, 50))
+
     while run:
 
         ground.platforms(0, 470, 500, 30)
