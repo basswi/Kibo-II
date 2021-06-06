@@ -43,7 +43,7 @@ class Background:
         # pygame.display.flip()
 
 class Player:
-
+    #first - placing our player
     def __init__(self):
         self.xcord = 20
         self.ycord = 360
@@ -51,10 +51,12 @@ class Player:
         self.image = pygame.transform.scale(self.image, (120, 120))
         self.width = self.image.get_width()
         self.height = self.image.get_height()
-        self.h_velocity = 0  #predkosc w poziomie
+        #adding horizontal velocity, vertical velocity, acceleration, max velocity
+        self.h_velocity = 0
         self.v_velocity = 0
         self.accel = 0.5
         self.max_velocity = 3
+        #to set hitbox collision
         self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
 
     def tick(self, keys):
@@ -78,12 +80,14 @@ class Player:
         window.blit(self.image, (self.xcord, self.ycord))
 
 class Bush:
+    #first - placing our bush
     def __init__(self):
         self.xcord = 350
         self.ycord = 23
         self.image = pygame.image.load("krzak.png")
         self.width = self.image.get_width()
         self.height = self.image.get_height()
+        #to set hitbox collision
         self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
     def tick(self):
         self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
@@ -91,6 +95,7 @@ class Bush:
         window.blit(self.image, (self.xcord, self.ycord))
 
 class Berry:
+    #first - placing our berry
     def __init__(self):
         self.xcord = 350
         self.ycord = 50
@@ -144,15 +149,15 @@ volume = Music()
 
 # Main loop:
 def main():
-
     run = True
     player = Player()
+    #making a list, then we will add our bush to the list
     bushes = []
+    #making a list, then we will add our berry to the list
     berries = []
     bush = 0
     berry = 0
     background = pygame.image.load("forest.jpg")
-
     welcome = font.render("Witaj w świecie Kibo-II!", True, (0,0,0))
     background.blit(welcome, (50, 50))
 
@@ -167,12 +172,15 @@ def main():
 
         keys = pygame.key.get_pressed()
 
+        #adding bush to the list
         if bush == 0:
             bushes.append(Bush())
         for bush in bushes:
             bush.tick()
         for berry in berries:
             berry.tick()
+
+        #if the player collides with the bush, we delete the bush and we add berry to the list
         for bush in bushes:
             if player.hitbox.colliderect(bush.hitbox):
                 bushes.remove(bush)
@@ -181,6 +189,8 @@ def main():
         player.tick(keys)
         window.blit(background, (0, 0 ))
         player.draw()
+
+        #drawing our bush and our berry
         for bush in bushes:
             bush.draw()
         for berry in berries:
