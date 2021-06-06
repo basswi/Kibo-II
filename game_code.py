@@ -6,6 +6,8 @@ from pygame.locals import (K_UP, K_DOWN, K_LEFT, K_RIGHT, K_ESCAPE, KEYDOWN, QUI
 import pygame_menu
 #importing mixer for sounds
 from pygame import mixer
+#preset the mixer init arguments
+pygame.mixer.pre_init(frequency=44100, size=-16, channels=1, buffer=512)
 
 #initiating pygame
 pygame.init()
@@ -72,12 +74,32 @@ class Player:
         window.blit(self.image, (self.xcord, self.ycord))
 
 
+class Volume:
+
+    def __init__(self):
+        pygame.mixer.music.load("music.wav")
+        #looping main music
+        pygame.mixer.music.play(-1)
+        #adjusting volume
+        pygame.mixer.music.set_volume(0.3)
+
+    #function for adjusting sound in menu
+    def adjust_volume(self,value,loudness):
+        if loudness == 0:
+            pygame.mixer.music.set_volume(0.00)
+        if loudness == 1:
+            pygame.mixer.music.set_volume(0.1)
+        if loudness == 2:
+            pygame.mixer.music.unpause()
+            pygame.mixer.music.set_volume(0.2)
+        if loudness == 3:
+            pygame.mixer.music.unpause()
+            pygame.mixer.music.set_volume(0.3)
 
 # choosing the style of the font for texts
 pygame.font.init()
 font = pygame.font.SysFont("cambria", 20)
 window = pygame.display.set_mode((500, 500))
-
 
 
 kibo_bg = Background()
@@ -86,7 +108,7 @@ platform_1 = Background()
 platform_2 = Background()
 platform_3 = Background()
 platform_4 = Background()
-
+volume = Volume()
 
 
 # Main loop:
@@ -136,6 +158,7 @@ def start_the_game():
 main_menu = pygame_menu.Menu("Menu", 500, 500, theme=pygame_menu.themes.THEME_GREEN)
 main_menu.add.button("Zacznij grę", start_the_game)
 main_menu.add.button("Opcje")
+main_menu.add.selector("Poziom głośności:", [("Max",3),("2",2),("1",1),("0", 0)], onchange = volume.adjust_volume)
 main_menu.add.button("Wyjdź", pygame_menu.events.EXIT)
 main_menu.mainloop(window)
 
