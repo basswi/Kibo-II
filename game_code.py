@@ -1,21 +1,19 @@
 # import pygame library
-import pygame, sys
+import pygame
 # import pygame.locals for easier access to key coordinates
-from pygame.locals import (K_UP, K_DOWN, K_LEFT, K_RIGHT, K_ESCAPE, KEYDOWN, QUIT, MOUSEBUTTONDOWN)
-# import tkinter to create menu buttons
-from tkinter import *
+from pygame.locals import (K_UP, K_DOWN, K_LEFT, K_RIGHT, K_ESCAPE, KEYDOWN, QUIT)
+# import pygame-menu to create menu buttons
+import pygame_menu
 #importing mixer for sounds
 from pygame import mixer
 
 #initiating pygame
 pygame.init()
 
-# choosing the style of the font for texts
-pygame.font.init()
-font = pygame.font.SysFont("cambria", 20)
-window = pygame.display.set_mode((500, 500))
+
 
 class Background:
+
     def __init__(self):
         # define constansts for the screen width and hight
         self.screen_width = 500
@@ -42,7 +40,10 @@ class Background:
         # use pygame.display.flip() to see the platforms
         # pygame.display.flip()
 
+
+
 class Player:
+
     def __init__(self):
         self.xcord = 20
         self.ycord = 360
@@ -72,27 +73,11 @@ class Player:
 
 
 
-# define menu method with buttons
-def main_menu():
+# choosing the style of the font for texts
+pygame.font.init()
+font = pygame.font.SysFont("cambria", 20)
+window = pygame.display.set_mode((500, 500))
 
-    # variable to keep the main loop running
-    running = True
-    while running:
-
-        # look at every event in the queue
-        for event in pygame.event.get():
-
-            # did the user click the window close button? If so, stop the loop.
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-
-            # did the user hit a key?
-            if event.type == KEYDOWN:
-                # was it the escape key? If so, stop the loop.
-                if event.key == K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
 
 
 kibo_bg = Background()
@@ -102,28 +87,55 @@ platform_2 = Background()
 platform_3 = Background()
 platform_4 = Background()
 
+
+
 # Main loop:
 def main():
+
     run = True
     player = Player()
     background = pygame.image.load("forest.jpg")
+
     while run:
+
         ground.platforms(0, 470, 500, 30)
         platform_1.platforms(78, 370, 64, 10)
         platform_2.platforms(182, 303, 75, 15)
         platform_3.platforms(289, 240, 62, 10)
         platform_4.platforms(370, 200, 120, 15)
         kibo_bg.bg_image()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
+
         keys = pygame.key.get_pressed()
         player.tick(keys)
         window.blit(background, (0, 0 ))
         player.draw()
         pygame.display.update()
 
-if __name__ == "__main__":
-    main()
+        # look at every event in the queue
+        for event in pygame.event.get():
+
+            # did the user click the window close button? If so, stop the loop.
+            if event.type == QUIT:
+                pygame.quit()
+
+            # did the user hit a key?
+            if event.type == KEYDOWN:
+                # was it the escape key? If so, stop the loop.
+                if event.key == K_ESCAPE:
+                    pygame.quit()
+
+
+
+def start_the_game():
+    if __name__ == "__main__":
+        main()
+
+main_menu = pygame_menu.Menu("Menu", 500, 500, theme=pygame_menu.themes.THEME_GREEN)
+main_menu.add.button("Zacznij grę", start_the_game)
+main_menu.add.button("Opcje")
+main_menu.add.button("Wyjdź", pygame_menu.events.EXIT)
+main_menu.mainloop(window)
+
+
 
 pygame.quit()
