@@ -42,8 +42,6 @@ class Background:
         # use pygame.display.flip() to see the platforms
         # pygame.display.flip()
 
-
-
 class Player:
 
     def __init__(self):
@@ -57,6 +55,7 @@ class Player:
         self.v_velocity = 0
         self.accel = 0.5
         self.max_velocity = 3
+        self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
 
     def tick(self, keys):
         if keys[pygame.K_LEFT] and self.h_velocity > self.max_velocity * -1:
@@ -73,10 +72,35 @@ class Player:
                 self.h_velocity += self.accel
                 step_sound.stop()
         self.xcord += self.h_velocity
+        self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
 
     def draw(self):
         window.blit(self.image, (self.xcord, self.ycord))
 
+class Bush:
+    def __init__(self):
+        self.xcord = 350
+        self.ycord = 23
+        self.image = pygame.image.load("krzak.png")
+        self.width = self.image.get_width()
+        self.height = self.image.get_height()
+        self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
+    def tick(self):
+        self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
+    def draw(self):
+        window.blit(self.image, (self.xcord, self.ycord))
+
+class Berry:
+    def __init__(self):
+        self.xcord = 350
+        self.ycord = 50
+        self.image = pygame.image.load("jagoda.png")
+        self.width = self.image.get_width()
+        self.height = self.image.get_height()
+    def tick(self):
+        pass
+    def draw(self):
+        window.blit(self.image, (self.xcord, self.ycord))
 
 class Music:
 
@@ -123,6 +147,10 @@ def main():
 
     run = True
     player = Player()
+    bushes = []
+    berries = []
+    bush = 0
+    berry = 0
     background = pygame.image.load("forest.jpg")
 
     welcome = font.render("Witaj w świecie Kibo-II!", True, (0,0,0))
@@ -138,9 +166,25 @@ def main():
         kibo_bg.bg_image()
 
         keys = pygame.key.get_pressed()
+
+        if bush == 0:
+            bushes.append(Bush())
+        for bush in bushes:
+            bush.tick()
+        for berry in berries:
+            berry.tick()
+        for bush in bushes:
+            if player.hitbox.colliderect(bush.hitbox):
+                bushes.remove(bush)
+                berries.append(Berry())
+
         player.tick(keys)
         window.blit(background, (0, 0 ))
         player.draw()
+        for bush in bushes:
+            bush.draw()
+        for berry in berries:
+            berry.draw()
         pygame.display.update()
 
         # look at every event in the queue
