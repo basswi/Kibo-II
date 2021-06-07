@@ -31,7 +31,7 @@ class Background:
         self.background = pygame.image.load("forest.jpg")
         # get the image, position it at (0, 0) and draw it onto the screen
         self.screen.blit(self.background, (0, 0))
-        pygame.display.flip()
+        #pygame.display.flip()
 
     def platforms(self, position_1, position_2, width, height):
         # define platform colour
