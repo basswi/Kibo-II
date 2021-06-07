@@ -46,9 +46,9 @@ class Player:
     #first - placing our player
     def __init__(self):
         self.xcord = 20
-        self.ycord = 360
+        self.ycord = 400
         self.image = pygame.image.load("ludzik-removebg.png")
-        self.image = pygame.transform.scale(self.image, (120, 120))
+        self.image = pygame.transform.scale(self.image, (80, 80))
         self.width = self.image.get_width()
         self.height = self.image.get_height()
         #adding horizontal velocity, vertical velocity, acceleration, max velocity
@@ -80,7 +80,7 @@ class Player:
         window.blit(self.image, (self.xcord, self.ycord))
 
 class Bush:
-    #firstly - placing our bush
+    #first - placing our bush
     def __init__(self):
         self.xcord = 350
         self.ycord = 23
@@ -95,7 +95,7 @@ class Bush:
         window.blit(self.image, (self.xcord, self.ycord))
 
 class Berry:
-    #firstly - placing our berry
+    #first - placing our berry
     def __init__(self):
         self.xcord = 350
         self.ycord = 50
