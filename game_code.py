@@ -80,7 +80,7 @@ class Player:
         window.blit(self.image, (self.xcord, self.ycord))
 
 class Bush:
-    #first - placing our bush
+    #firstly - placing our bush
     def __init__(self):
         self.xcord = 350
         self.ycord = 23
@@ -95,7 +95,7 @@ class Bush:
         window.blit(self.image, (self.xcord, self.ycord))
 
 class Berry:
-    #first - placing our berry
+    #firstly - placing our berry
     def __init__(self):
         self.xcord = 350
         self.ycord = 50
