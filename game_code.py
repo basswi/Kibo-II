@@ -84,7 +84,7 @@ class Bush:
     def __init__(self):
         self.xcord = 350
         self.ycord = 23
-        self.image = pygame.image.load("krzak.png")
+        self.image = pygame.image.load("blueberry_bush-removebg.png")
         self.width = self.image.get_width()
         self.height = self.image.get_height()
         #to set hitbox collision
@@ -99,7 +99,7 @@ class Berry:
     def __init__(self):
         self.xcord = 350
         self.ycord = 50
-        self.image = pygame.image.load("jagoda.png")
+        self.image = pygame.image.load("blueberry-removebg.png")
         self.width = self.image.get_width()
         self.height = self.image.get_height()
     def tick(self):
