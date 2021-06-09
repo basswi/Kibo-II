@@ -47,17 +47,21 @@ class Player:
     def __init__(self):
         self.xcord = 20
         self.ycord = 400
-        self.image = pygame.image.load("ludzik-removebg.png")
+        self.image = pygame.image.load("Red-riding-hood-removebg.png")
         self.image = pygame.transform.scale(self.image, (80, 80))
         self.width = self.image.get_width()
         self.height = self.image.get_height()
         #adding horizontal velocity, vertical velocity, acceleration, max velocity
         self.h_velocity = 0
         self.v_velocity = 0
-        self.accel = 0.5
+        self.accel = 5
         self.max_velocity = 3
         #to set hitbox collision
         self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
+        # variable for jumping function
+        self.is_jumping = False
+        self.jump_count = 10
+        self.jump_accel = 10
 
     def tick(self, keys):
         if keys[pygame.K_LEFT] and self.h_velocity > self.max_velocity * -1:
@@ -75,6 +79,17 @@ class Player:
                 step_sound.stop()
         self.xcord += self.h_velocity
         self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
+        pygame.time.delay(10)
+
+
+    def jump(self):
+        if self.is_jumping == True:
+            self.ycord -= self.jump_accel * 2.5
+            self.jump_accel -= 1
+            if self.jump_accel < - 10:
+                self.is_jumping = False
+                self.jump_accel = 10
+        pygame.time.delay(10)
 
     def draw(self):
         window.blit(self.image, (self.xcord, self.ycord))
@@ -187,6 +202,7 @@ def main():
                 berries.append(Berry())
 
         player.tick(keys)
+        player.jump()
         window.blit(background, (0, 0 ))
         player.draw()
 
@@ -206,6 +222,8 @@ def main():
 
             # did the user hit a key?
             if event.type == KEYDOWN:
+                if event.key == K_UP:
+                    player.is_jumping = True
                 # was it the escape key? If so, stop the loop.
                 if event.key == K_ESCAPE:
                     pygame.quit()
