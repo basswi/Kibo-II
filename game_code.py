@@ -47,7 +47,7 @@ class Player:
     def __init__(self):
         self.xcord = 20
         self.ycord = 400
-        self.image = pygame.image.load("ludzik-removebg.png")
+        self.image = pygame.image.load("red-riding-hood-removebg.png")
         self.image = pygame.transform.scale(self.image, (80, 80))
         self.width = self.image.get_width()
         self.height = self.image.get_height()
