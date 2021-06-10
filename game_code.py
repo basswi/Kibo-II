@@ -199,12 +199,12 @@ class Enemy:
         self.width = self.image.get_width()
         self.height = self.image.get_height()
         self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
-        self.howl_timer = 100000
+        self.howl_timer = 50000
 
     def howling(self):
         self.howl_timer += pygame.time.get_ticks()/1000
         print(self.howl_timer)
-        if self.howl_timer > 100000:
+        if self.howl_timer > 50000:
             random.choice(wolf_sounds).play()
             self.howl_timer = 0
 
@@ -246,7 +246,7 @@ jump_sound = pygame.mixer.Sound('jump.wav')
 jump_sound.set_volume(0.3)
 
 wolf_sounds= [pygame.mixer.Sound('wolf.wav'), pygame.mixer.Sound('growl.wav')]
-wolf_sounds[0].set_volume(0.1)
+wolf_sounds[0].set_volume(0.05)
 wolf_sounds[1].set_volume(0.1)
 
 # choosing the style of the font for texts
