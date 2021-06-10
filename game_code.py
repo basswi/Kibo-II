@@ -1,7 +1,8 @@
 # import pygame library
-import pygame
+import pygame, sys
 # import pygame.locals for easier access to key coordinates
-from pygame.locals import (K_UP, K_DOWN, K_LEFT, K_RIGHT, K_ESCAPE, KEYDOWN, QUIT)
+from pygame.locals import (K_UP, K_DOWN, K_LEFT, K_RIGHT, K_ESCAPE, KEYDOWN,
+                           MOUSEBUTTONDOWN, QUIT)
 # import pygame-menu to create menu buttons
 import pygame_menu
 #importing mixer for sounds
@@ -25,8 +26,10 @@ class Background:
         self.screen_height))
 
     def bg_image(self):
-        # set game window name
-        pygame.display.set_caption("Kibo II")
+        # replaced this to lines 54-55
+        # # set game window name
+        # pygame.display.set_caption("Kibo II")
+
         # load image to create a background object
         self.background = pygame.image.load("forest.jpg")
         # get the image, position it at (0, 0) and draw it onto the screen
@@ -41,6 +44,23 @@ class Background:
         pygame.Rect(position_1, position_2, width, height))
         # use pygame.display.flip() to see the platforms
         # pygame.display.flip()
+
+
+# define class for intro to our game
+class instructions():
+
+    # set background for intro
+    def __init__(self):
+        bg_menu = pygame.image.load("forest-menu.jpg")
+        # set game window name
+        pygame.display.set_caption("Kibo II")
+        window.blit(bg_menu, [0, 0])
+        # print text on a screen
+        welcome = font.render("Witaj w świecie Zaczarowanym Lesie!", True, (0,0,0))
+        window.blit(welcome, [50, 50])
+        pygame.display.flip()
+
+
 
 class Player:
     #first - placing our player
@@ -81,7 +101,6 @@ class Player:
         self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
         pygame.time.delay(10)
 
-
     def jump(self):
         if self.is_jumping == True:
             self.ycord -= self.jump_accel * 2.5
@@ -93,6 +112,8 @@ class Player:
 
     def draw(self):
         window.blit(self.image, (self.xcord, self.ycord))
+
+
 
 class Bush:
     #first - placing our bush
@@ -109,6 +130,8 @@ class Bush:
     def draw(self):
         window.blit(self.image, (self.xcord, self.ycord))
 
+
+
 class Berry:
     #first - placing our berry
     def __init__(self):
@@ -121,6 +144,8 @@ class Berry:
         pass
     def draw(self):
         window.blit(self.image, (self.xcord, self.ycord))
+
+
 
 class Music:
 
@@ -144,6 +169,8 @@ class Music:
             pygame.mixer.music.unpause()
             pygame.mixer.music.set_volume(0.3)
 
+
+
 step_sound = pygame.mixer.Sound("steps.wav")
 step_sound.set_volume(0.1)
 
@@ -162,10 +189,10 @@ platform_4 = Background()
 volume = Music()
 
 
-# Main loop:
-def main():
-    run = True
+# function for gameplay
+def start_the_game():
     player = Player()
+
     #making a list, then we will add our bush to the list
     bushes = []
     #making a list, then we will add our berry to the list
@@ -173,10 +200,10 @@ def main():
     bush = 0
     berry = 0
     background = pygame.image.load("forest.jpg")
-    welcome = font.render("Witaj w świecie Kibo-II!", True, (0,0,0))
-    background.blit(welcome, (50, 50))
 
-    while run:
+    # set variable to keep the loop running
+    running = True
+    while running:
 
         ground.platforms(0, 470, 500, 30)
         platform_1.platforms(78, 370, 64, 10)
@@ -184,8 +211,6 @@ def main():
         platform_3.platforms(289, 240, 62, 10)
         platform_4.platforms(370, 200, 120, 15)
         kibo_bg.bg_image()
-
-        keys = pygame.key.get_pressed()
 
         #adding bush to the list
         if bush == 0:
@@ -195,49 +220,77 @@ def main():
         for berry in berries:
             berry.tick()
 
+        #drawing our bush and our berry
+        for bush in bushes:
+            bush.draw()
+        for berry in berries:
+            berry.draw()
+
         #if the player collides with the bush, we delete the bush and we add berry to the list
         for bush in bushes:
             if player.hitbox.colliderect(bush.hitbox):
                 bushes.remove(bush)
                 berries.append(Berry())
 
+        keys = pygame.key.get_pressed()
         player.tick(keys)
         player.jump()
         window.blit(background, (0, 0 ))
         player.draw()
 
-        #drawing our bush and our berry
-        for bush in bushes:
-            bush.draw()
-        for berry in berries:
-            berry.draw()
+        for event in pygame.event.get():
+            # check if it's quiting
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == KEYDOWN:
+                if event.key == K_UP:
+                    player.is_jumping = True
+                # if it's escape close the game
+                if event.key == K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+
+
         pygame.display.update()
+
+# define main funtion of the game
+def main():
+
+    # set variable to keep the main loop running
+    run = True
+    # call introduction
+    history = instructions()
+    # main loop
+    while run:
 
         # look at every event in the queue
         for event in pygame.event.get():
 
-            # did the user click the window close button? If so, stop the loop.
+            # check if it's quiting
             if event.type == QUIT:
                 pygame.quit()
 
-            # did the user hit a key?
+            # if it's mousebutton start the game
+            if event.type == MOUSEBUTTONDOWN:
+                start_the_game()
+
+            # check if the user hit a key
             if event.type == KEYDOWN:
-                if event.key == K_UP:
-                    player.is_jumping = True
-                # was it the escape key? If so, stop the loop.
+                # if it's escape close the game
                 if event.key == K_ESCAPE:
                     pygame.quit()
 
 
 
 # calling the game
-def start_the_game():
+def start_the_intro():
     if __name__ == "__main__":
         main()
 
 # defining menu options
 main_menu = pygame_menu.Menu("Menu", 500, 500, theme=pygame_menu.themes.THEME_GREEN)
-main_menu.add.button("Zacznij grę", start_the_game)
+main_menu.add.button("Zacznij grę", start_the_intro)
 main_menu.add.selector("Poziom głośności:", [("Max",3),("2",2),("1",1),("0", 0)], onchange = volume.adjust_volume)
 main_menu.add.button("Wyjdź", pygame_menu.events.EXIT)
 
