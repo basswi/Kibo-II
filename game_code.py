@@ -145,7 +145,7 @@ class Berry:
     def draw(self):
         window.blit(self.image, (self.xcord, self.ycord))
 
-<<<<<<< HEAD
+
 class Enemy:
     def __init__(self):
         self.xcord = 375
@@ -159,8 +159,7 @@ class Enemy:
         self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
     def draw(self):
         window.blit(self.image, (self.xcord, self.ycord))
-=======
->>>>>>> 806f3b36a57a4c2b81d45b0fb90ed8e5011217ac
+
 
 
 class Music:
@@ -208,11 +207,8 @@ volume = Music()
 # function for gameplay
 def start_the_game():
     player = Player()
-<<<<<<< HEAD
     enemy = Enemy()
-=======
 
->>>>>>> 806f3b36a57a4c2b81d45b0fb90ed8e5011217ac
     #making a list, then we will add our bush to the list
     bushes = []
     #making a list, then we will add our berry to the list
