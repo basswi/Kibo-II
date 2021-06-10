@@ -236,12 +236,6 @@ def start_the_game():
         for berry in berries:
             berry.tick()
 
-        #drawing our bush and our berry
-        for bush in bushes:
-            bush.draw()
-        for berry in berries:
-            berry.draw()
-
         #if the player collides with the bush, we delete the bush and we add berry to the list
         for bush in bushes:
             if player.hitbox.colliderect(bush.hitbox):
@@ -255,6 +249,12 @@ def start_the_game():
         window.blit(background, (0, 0 ))
         player.draw()
         enemy.draw()
+
+        #drawing our bush and our berry
+        for bush in bushes:
+            bush.draw()
+        for berry in berries:
+            berry.draw()
 
         for event in pygame.event.get():
             # check if it's quiting
