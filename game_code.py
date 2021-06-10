@@ -7,13 +7,14 @@ from pygame.locals import (K_UP, K_DOWN, K_LEFT, K_RIGHT, K_ESCAPE, KEYDOWN,
 import pygame_menu
 #importing mixer for sounds
 from pygame import mixer
+import random
 #preset the mixer init arguments
 pygame.mixer.pre_init(frequency=44100, size=-16, channels=1, buffer=4096)
 
 #initiating pygame
 pygame.init()
 
-
+clock = clock = pygame.time.Clock()
 
 class Background:
 
@@ -198,6 +199,16 @@ class Enemy:
         self.width = self.image.get_width()
         self.height = self.image.get_height()
         self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
+        self.howl_timer = 100000
+
+    def howling(self):
+        self.howl_timer += pygame.time.get_ticks()/1000
+        print(self.howl_timer)
+        if self.howl_timer > 100000:
+            random.choice(wolf_sounds).play()
+            self.howl_timer = 0
+
+
     def tick(self):
         self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
     def draw(self):
@@ -228,9 +239,15 @@ class Music:
             pygame.mixer.music.set_volume(0.3)
 
 
-
+#sound library
 step_sound = pygame.mixer.Sound("steps.wav")
 step_sound.set_volume(0.1)
+jump_sound = pygame.mixer.Sound('jump.wav')
+jump_sound.set_volume(0.3)
+
+wolf_sounds= [pygame.mixer.Sound('wolf.wav'), pygame.mixer.Sound('growl.wav')]
+wolf_sounds[0].set_volume(0.1)
+wolf_sounds[1].set_volume(0.1)
 
 # choosing the style of the font for texts
 pygame.font.init()
@@ -293,6 +310,7 @@ def start_the_game():
         window.blit(background, (0, 0 ))
         player.draw()
         enemy.draw()
+        enemy.howling()
 
         #drawing our bush and our berry
         for bush in bushes:
@@ -308,6 +326,7 @@ def start_the_game():
             if event.type == KEYDOWN:
                 if event.key == K_UP:
                     player.is_jumping = True
+                    jump_sound.play()
                 # if it's escape close the game
                 if event.key == K_ESCAPE:
                     pygame.quit()
