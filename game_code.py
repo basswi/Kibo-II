@@ -40,7 +40,7 @@ class Background:
         # define platform colour
         self.color = (255, 0, 0)
         # draw the platform onto the screen
-        self.platform = pygame.draw.rect(self.screen, self.color,
+        self.hitbox = pygame.draw.rect(self.screen, self.color,
         pygame.Rect(position_1, position_2, width, height))
         # use pygame.display.flip() to see the platforms
         # pygame.display.flip()
@@ -69,8 +69,8 @@ class Player:
         self.ycord = 400
         self.image = pygame.image.load("red-riding-hood-removebg.png")
         self.image = pygame.transform.scale(self.image, (80, 80))
-        self.width = self.image.get_width()
-        self.height = self.image.get_height()
+        self.width =  50
+        self.height = 50
         #adding horizontal velocity, vertical velocity, acceleration, max velocity
         self.h_velocity = 0
         self.v_velocity = 0
@@ -82,6 +82,18 @@ class Player:
         self.is_jumping = False
         self.jump_count = 10
         self.jump_accel = 10
+
+    #pulling player to lowest layer
+    def gravity(self):
+        if self.ycord != 400:
+            self.ycord += 5
+            if self.ycord > 400:
+                self.ycord == 400
+
+    #not pulling player when on platform
+    def onplatform(self):
+        if self.ycord !=400:
+            self.ycord += 0
 
     def tick(self, keys):
         if keys[pygame.K_LEFT] and self.h_velocity > self.max_velocity * -1:
@@ -100,6 +112,37 @@ class Player:
         self.xcord += self.h_velocity
         self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
         pygame.time.delay(10)
+
+        #instances
+        ground.platforms(0, 470, 500, 30)
+        platform_1.platforms(78, 370, 64, 10)
+        platform_2.platforms(182, 303, 75, 15)
+        platform_3.platforms(289, 240, 62, 10)
+        platform_4.platforms(370, 200, 120, 15)
+
+        #CAUTION, SPAGHETTI COLLISION
+        if self.hitbox.colliderect(ground.hitbox):
+            self.ycord = 400
+
+        if self.hitbox.colliderect(platform_1.hitbox):
+            self.onplatform()
+            #self.stop_jump()
+            self.ycord = 316
+
+        if self.hitbox.colliderect(platform_2.hitbox):
+            self.onplatform()
+            #self.stop_jump()
+            self.ycord = 303-54
+
+        if self.hitbox.colliderect(platform_3.hitbox):
+            self.onplatform()
+            #self.stop_jump()
+            self.ycord = 240-54
+
+        if self.hitbox.colliderect(platform_4.hitbox):
+            self.onplatform()
+            #self.stop_jump()
+            self.ycord = 200-54
 
     def jump(self):
         if self.is_jumping == True:
@@ -236,12 +279,6 @@ def start_the_game():
         for berry in berries:
             berry.tick()
 
-        #drawing our bush and our berry
-        for bush in bushes:
-            bush.draw()
-        for berry in berries:
-            berry.draw()
-
         #if the player collides with the bush, we delete the bush and we add berry to the list
         for bush in bushes:
             if player.hitbox.colliderect(bush.hitbox):
@@ -251,10 +288,17 @@ def start_the_game():
         keys = pygame.key.get_pressed()
         player.tick(keys)
         player.jump()
+        player.gravity()
         enemy.tick()
         window.blit(background, (0, 0 ))
         player.draw()
         enemy.draw()
+
+        #drawing our bush and our berry
+        for bush in bushes:
+            bush.draw()
+        for berry in berries:
+            berry.draw()
 
         for event in pygame.event.get():
             # check if it's quiting
