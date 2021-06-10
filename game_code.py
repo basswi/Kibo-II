@@ -122,6 +122,21 @@ class Berry:
     def draw(self):
         window.blit(self.image, (self.xcord, self.ycord))
 
+class Enemy:
+    def __init__(self):
+        self.xcord = 375
+        self.ycord = 345
+        self.image = pygame.image.load("wilczek.png")
+        self.image = pygame.transform.scale(self.image, (150, 140))
+        self.width = self.image.get_width()
+        self.height = self.image.get_height()
+        self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
+    def tick(self):
+        self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
+    def draw(self):
+        window.blit(self.image, (self.xcord, self.ycord))
+
+
 class Music:
 
     def __init__(self):
@@ -166,6 +181,7 @@ volume = Music()
 def main():
     run = True
     player = Player()
+    enemy = Enemy()
     #making a list, then we will add our bush to the list
     bushes = []
     #making a list, then we will add our berry to the list
@@ -203,8 +219,10 @@ def main():
 
         player.tick(keys)
         player.jump()
+        enemy.tick()
         window.blit(background, (0, 0 ))
         player.draw()
+        enemy.draw()
 
         #drawing our bush and our berry
         for bush in bushes:
