@@ -37,10 +37,10 @@ class Background:
         # define platform colour
         self.color = (255, 0, 0)
         # draw the platform onto the screen
-        self.platform = pygame.draw.rect(self.screen, self.color,
-        pygame.Rect(position_1, position_2, width, height))
+        self.hitbox = pygame.draw.rect(self.screen, self.color,
+        pygame.Rect(position_1, position_2, width, height),1)
         # use pygame.display.flip() to see the platforms
-        # pygame.display.flip()
+        #pygame.display.flip()
 
 class Player:
     #first - placing our player
@@ -48,9 +48,9 @@ class Player:
         self.xcord = 20
         self.ycord = 400
         self.image = pygame.image.load("red-riding-hood-removebg.png")
-        self.image = pygame.transform.scale(self.image, (80, 80))
-        self.width = self.image.get_width()
-        self.height = self.image.get_height()
+        self.image = pygame.transform.scale(self.image,(80,80))
+        self.width = 50
+        self.height = 50
         #adding horizontal velocity, vertical velocity, acceleration, max velocity
         self.h_velocity = 0
         self.v_velocity = 0
@@ -62,6 +62,17 @@ class Player:
         self.is_jumping = False
         self.jump_count = 10
         self.jump_accel = 10
+
+    def gravity(self):
+        if self.ycord != 400:
+            self.ycord += 5
+            if self.ycord > 400:
+                self.ycord == 400
+
+    def onplatform(self):
+        if self.ycord !=400:
+            self.ycord += 0
+
 
     def tick(self, keys):
         if keys[pygame.K_LEFT] and self.h_velocity > self.max_velocity * -1:
@@ -81,15 +92,50 @@ class Player:
         self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
         pygame.time.delay(10)
 
+        ground.platforms(0, 470, 500, 30)
+        platform_1.platforms(78, 370, 64, 10)
+        platform_2.platforms(182, 303, 75, 15)
+        platform_3.platforms(289, 240, 62, 10)
+        platform_4.platforms(370, 200, 120, 15)
+
+#CAUTION, SPAGHETTI COLLISION
+        if self.hitbox.colliderect(ground.hitbox):
+            self.ycord = 400
+            print(self.ycord)
+
+        if self.hitbox.colliderect(platform_1.hitbox):
+            self.onplatform()
+            #self.stop_jump()
+            self.ycord = 332
+            print(self.ycord)
+
+        if self.hitbox.colliderect(platform_2.hitbox):
+            self.onplatform()
+            #self.stop_jump()
+            self.ycord = 303-38
+            print(self.ycord)
+
+        if self.hitbox.colliderect(platform_3.hitbox):
+            self.onplatform()
+            #self.stop_jump()
+            self.ycord = 202
+            print(self.ycord)
+
+        if self.hitbox.colliderect(platform_4.hitbox):
+            self.onplatform()
+            #self.stop_jump()
+            self.ycord = 162
+            print(self.ycord)
+
 
     def jump(self):
         if self.is_jumping == True:
-            self.ycord -= self.jump_accel * 2.5
+            self.ycord -= self.jump_accel * 3
             self.jump_accel -= 1
             if self.jump_accel < - 10:
                 self.is_jumping = False
                 self.jump_accel = 10
-        pygame.time.delay(10)
+        pygame.time.delay(5)
 
     def draw(self):
         window.blit(self.image, (self.xcord, self.ycord))
@@ -201,6 +247,7 @@ def main():
                 bushes.remove(bush)
                 berries.append(Berry())
 
+        player.gravity()
         player.tick(keys)
         player.jump()
         window.blit(background, (0, 0 ))
