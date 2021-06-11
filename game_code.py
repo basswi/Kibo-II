@@ -62,7 +62,6 @@ class instructions():
         pygame.display.flip()
 
 
-
 class Player:
     #first - placing our player
     def __init__(self):
@@ -79,10 +78,10 @@ class Player:
         self.max_velocity = 3
         #to set hitbox collision
         self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
-        # variable for jumping function
+        # variables for jump function
         self.is_jumping = False
         self.jump_count = 10
-        self.jump_accel = 10
+        self.jump_height = 10
 
     #pulling player to lowest layer
     def gravity(self):
@@ -146,17 +145,19 @@ class Player:
             self.ycord = 200-54
 
     def jump(self):
+        # if user hits K_UP
         if self.is_jumping == True:
-            self.ycord -= self.jump_accel * 2.5
-            self.jump_accel -= 1
-            if self.jump_accel < - 10:
+            # decrease y coordinate
+            self.ycord -= self.jump_height * 2.5
+            self.jump_height -= 1
+            # stop jumping when jump_height reaches -10
+            if self.jump_height < - 10:
                 self.is_jumping = False
-                self.jump_accel = 10
+                self.jump_height = 10
         pygame.time.delay(10)
 
     def draw(self):
         window.blit(self.image, (self.xcord, self.ycord))
-
 
 
 class Bush:
@@ -169,11 +170,12 @@ class Bush:
         self.height = self.image.get_height()
         #to set hitbox collision
         self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
+
     def tick(self):
         self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
+
     def draw(self):
         window.blit(self.image, (self.xcord, self.ycord))
-
 
 
 class Berry:
@@ -184,15 +186,17 @@ class Berry:
         self.image = pygame.image.load("blueberry-removebg.png")
         self.width = self.image.get_width()
         self.height = self.image.get_height()
+
     def tick(self):
         pass
+
     def draw(self):
         window.blit(self.image, (self.xcord, self.ycord))
 
 
 class Enemy:
     def __init__(self):
-        self.xcord = 375
+        self.xcord = 280
         self.ycord = 345
         self.image = pygame.image.load("wilczek.png")
         self.image = pygame.transform.scale(self.image, (150, 140))
@@ -208,12 +212,37 @@ class Enemy:
             random.choice(wolf_sounds).play()
             self.howl_timer = 0
 
-
     def tick(self):
         self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
     def draw(self):
         window.blit(self.image, (self.xcord, self.ycord))
 
+
+class Victim:
+    def __init__(self):
+        self.xcord = 420
+        self.ycord = 395
+        self.image = pygame.image.load("golomp-removebg.png")
+        self.image = pygame.transform.scale(self.image, (80, 80))
+        self.width = self.image.get_width()
+        self.height = self.image.get_height()
+        self.hitbox = pygame.Rect(self.xcord, self.ycord, self.width, self.height)
+        self.is_jumping = False
+        self.jump_count = 10
+        self.jump_height = 10
+
+    def jump(self):
+        if self.is_jumping == True:
+            # decrease y coordinate
+            self.ycord -= self.jump_height * 0.8
+            self.jump_height -= 1
+            # stop jumping when jump_height reaches -10
+            if self.jump_height < - 10:
+                self.is_jumping = False
+                self.jump_height = 10
+
+    def draw(self):
+        window.blit(self.image, (self.xcord, self.ycord))
 
 
 class Music:
@@ -268,6 +297,7 @@ volume = Music()
 def start_the_game():
     player = Player()
     enemy = Enemy()
+    victim = Victim()
 
     #making a list, then we will add our bush to the list
     bushes = []
@@ -311,6 +341,14 @@ def start_the_game():
         player.draw()
         enemy.draw()
         enemy.howling()
+        victim.draw()
+        victim.jump()
+
+        #drawing our bush and our berry
+        for bush in bushes:
+            bush.draw()
+        for berry in berries:
+            berry.draw()
 
         #drawing our bush and our berry
         for bush in bushes:
@@ -325,6 +363,7 @@ def start_the_game():
                 sys.exit()
             if event.type == KEYDOWN:
                 if event.key == K_UP:
+                    # change is_jumping from False to True to make player jump
                     player.is_jumping = True
                     jump_sound.play()
                 # if it's escape close the game
@@ -332,6 +371,9 @@ def start_the_game():
                     pygame.quit()
                     sys.exit()
 
+            random_jump = random.randint(1, 3)
+            if random_jump == 3:
+                victim.is_jumping = True
 
         pygame.display.update()
 
