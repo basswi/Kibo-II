@@ -1,8 +1,8 @@
-# import pygame library
+# import pygame and sys library
 import pygame, sys
 # import pygame.locals for easier access to key coordinates
 from pygame.locals import (K_UP, K_DOWN, K_LEFT, K_RIGHT, K_ESCAPE, KEYDOWN,
-                           MOUSEBUTTONDOWN, QUIT)
+                           MOUSEBUTTONDOWN, K_RETURN, QUIT)
 # import pygame-menu to create menu buttons
 import pygame_menu
 #importing mixer for sounds
@@ -27,7 +27,7 @@ class Background:
         self.screen_height))
 
     def bg_image(self):
-        # replaced this to lines 54-55
+        # replaced this to lines 56-57
         # # set game window name
         # pygame.display.set_caption("Kibo II")
 
@@ -52,14 +52,61 @@ class instructions():
 
     # set background for intro
     def __init__(self):
-        bg_menu = pygame.image.load("forest-menu.jpg")
+        self.bg_menu = pygame.image.load("forest-menu.jpg")
         # set game window name
         pygame.display.set_caption("Kibo II")
-        window.blit(bg_menu, [0, 0])
-        # print text on a screen
-        welcome = font.render("Witaj w świecie Zaczarowanym Lesie!", True, (0,0,0))
-        window.blit(welcome, [50, 50])
+
+    def welcome_text(self):
+        # clearing background
+        window.blit(self.bg_menu, [0, 0])
+        # print welcome text on the screen
+        welcome = font.render("Witaj w naszym Zaczarowanym Lesie!", True, (0,0,0))
+        window.blit(welcome, [140, 50])
+        # print instruction1 on the screen
+        instruction1 = font.render("Aby przejść do rozgrywki naciśnij ekran w "
+                                   "dowolnym miejscu.", True, (0,0,0))
+        window.blit(instruction1, [50, 420])
+        # flip the screen to show results of printing texts
         pygame.display.flip()
+
+    def clicking(self):
+        # to prevent adding text one on the top of another
+        self.welcome_text()
+
+        # rendering texts
+        text1 = font.render("Pozwól, że wprowadzę Cię, w jakim celu się tu "
+                            "spotykamy...", True, (0,0,0))
+        window.blit(text1, [50,100])
+
+        text2 = font.render("W naszej okolicy od dawna grasuje wilk i nikt nie "
+                            "jest w stanie go", True, (0,0,0))
+        text3 = font.render(" wypędzić. Miejscowi mieszkańcy ukryli się lub "
+                            "przeprowadzili", True, (0,0,0))
+        text4 = font.render("za góry i lasy. ", True, (0,0,0))
+        text5 = font.render("Niestety nie wszystkim się to udało... Mały gołąbek"
+                            "został złapany", True, (0,0,0))
+        text6 = font.render("przez wilka. Aby go uwolnić potrzebujemy Ciebie, "
+                            "abyś go", True, (0,0,0))
+        text7 = font.render("pokonał/pokonała. My niestety nie wiemy, jak "
+                            "to zrobić. ", True, (0,0,0))
+        text8 = font.render("Może Tobie się to uda? Jest tylko jedna rzecz, o "
+                            "której musisz ", True, (0,0,0))
+        text9 = font.render("pamiętać: nikt nie może Cię zobaczyć!", True, (0,0,0))
+        good_luck = font.render("Powodzenia!", True, (0,0,0))
+
+        window.blit(text2, [50,120])
+        window.blit(text3, [50,140])
+        window.blit(text4, [50,160])
+        window.blit(text5, [50,200])
+        window.blit(text6, [50,220])
+        window.blit(text7, [50,240])
+        window.blit(text8, [50,260])
+        window.blit(text9, [50,280])
+        window.blit(good_luck, [50,340])
+
+        # flip the screen to show results of printing texts
+        pygame.display.flip()
+
 
 
 class Player:
@@ -280,7 +327,7 @@ wolf_sounds[1].set_volume(0.1)
 
 # choosing the style of the font for texts
 pygame.font.init()
-font = pygame.font.SysFont("cambria", 20)
+font = pygame.font.SysFont("gabriola", 20)
 window = pygame.display.set_mode((500, 500))
 
 
@@ -361,6 +408,7 @@ def start_the_game():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
+
             if event.type == KEYDOWN:
                 if event.key == K_UP:
                     # change is_jumping from False to True to make player jump
@@ -384,6 +432,7 @@ def main():
     run = True
     # call introduction
     history = instructions()
+    history.welcome_text()
     # main loop
     while run:
 
@@ -393,17 +442,20 @@ def main():
             # check if it's quiting
             if event.type == QUIT:
                 pygame.quit()
-
-            # if it's mousebutton start the game
-            if event.type == MOUSEBUTTONDOWN:
-                start_the_game()
+                sys.exit()
 
             # check if the user hit a key
             if event.type == KEYDOWN:
                 # if it's escape close the game
                 if event.key == K_ESCAPE:
                     pygame.quit()
+                    sys.exit()
 
+                if event.key == K_RETURN:
+                    history.clicking()
+
+            if event.type == MOUSEBUTTONDOWN:
+                start_the_game()
 
 
 # calling the game
@@ -421,5 +473,5 @@ main_menu.add.button("Wyjdź", pygame_menu.events.EXIT)
 main_menu.mainloop(window)
 
 
-
-pygame.quit()
+# this line is unnecessary
+# pygame.quit()
