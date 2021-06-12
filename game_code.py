@@ -143,6 +143,9 @@ class Player:
             self.ycord += 0
 
     def tick(self, keys):
+        #adding movement ability
+        #self.h_velocity = horizontal velocity
+        #self.v_velocity = vertical velocity
         if keys[pygame.K_LEFT] and self.h_velocity > self.max_velocity * -1:
             self.h_velocity -= self.accel
             step_sound.play(-1)
@@ -208,7 +211,7 @@ class Player:
 
 
 class Bush:
-    #first - placing our bush
+    #firstly - placing our bush
     def __init__(self):
         self.xcord = 350
         self.ycord = 23
@@ -224,26 +227,40 @@ class Bush:
     def draw(self):
         window.blit(self.image, (self.xcord, self.ycord))
 
+class Physic2:
+    #adding gravity for our berry
+    def __init__(self, acc2, max_vel2):
+        self.h_velocity2 = 0
+        self.v_velocity2 = 0
+        self.acc2 = acc2
+        self.max_velocity2 = max_vel2
 
-class Berry:
-    #first - placing our berry
+    def physic_tick2(self):
+        self.h_velocity2 += 0.1
+
+
+class Berry(Physic2):
+    #firstly - placing our berry
     def __init__(self):
-        self.xcord = 350
+        super().__init__(0.5, 5)
+        self.xcord = 335
         self.ycord = 50
         self.image = pygame.image.load("blueberry-removebg.png")
+        self.image = pygame.transform.scale(self.image, (120, 120))
         self.width = self.image.get_width()
         self.height = self.image.get_height()
 
     def tick(self):
-        pass
+        self.physic_tick2()
+        self.ycord += self.h_velocity2
+        self.xcord += self.v_velocity2
 
     def draw(self):
         window.blit(self.image, (self.xcord, self.ycord))
 
-
 class Enemy:
     def __init__(self):
-        self.xcord = 280
+        self.xcord = 345
         self.ycord = 345
         self.image = pygame.image.load("wilczek.png")
         self.image = pygame.transform.scale(self.image, (150, 140))
