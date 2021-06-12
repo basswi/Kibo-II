@@ -84,7 +84,7 @@ class instructions():
                             "przeprowadzili", True, (0,0,0))
         text4 = font.render("za góry i lasy. ", True, (0,0,0))
         text5 = font.render("Niestety nie wszystkim się to udało... Mały gołąbek"
-                            "został złapany", True, (0,0,0))
+                            " został złapany", True, (0,0,0))
         text6 = font.render("przez wilka. Aby go uwolnić potrzebujemy Ciebie, "
                             "abyś go", True, (0,0,0))
         text7 = font.render("pokonał/pokonała. My niestety nie wiemy, jak "
@@ -260,7 +260,7 @@ class Berry(Physic2):
 
 class Enemy:
     def __init__(self):
-        self.xcord = 345
+        self.xcord = 320
         self.ycord = 345
         self.image = pygame.image.load("wilczek.png")
         self.image = pygame.transform.scale(self.image, (150, 140))
@@ -284,7 +284,7 @@ class Enemy:
 
 class Victim:
     def __init__(self):
-        self.xcord = 420
+        self.xcord = 427
         self.ycord = 395
         self.image = pygame.image.load("golomp-removebg.png")
         self.image = pygame.transform.scale(self.image, (80, 80))
