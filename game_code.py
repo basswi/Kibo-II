@@ -255,16 +255,21 @@ class Berry(Physic2):
         self.ycord += self.h_velocity2
         self.xcord += self.v_velocity2
 
+    def draw(self):
+        window.blit(self.image, (self.xcord, self.ycord))
+
+class berry_moved():
+
+    def __init__(self):
         # checking the time of the tick and setting the stop time
         global berry_ticked
         berry_ticked = True
         if berry_ticked == True:
+            # I assume here's a problem, because it's changing the whole time
+            # and I want it to do just once, but I hadn't figured it out yet
             global start, stop
             start = clock.get_time()
             stop = start + 500
-
-    def draw(self):
-        window.blit(self.image, (self.xcord, self.ycord))
 
 class Enemy:
     def __init__(self):
@@ -400,20 +405,20 @@ def start_the_game():
             bush.tick()
         for berry in berries:
             berry.tick()
+            moved = berry_moved()
             # checking if berry is on the ground
-            if berry.ycord == 500:
+            # if berry.ycord == 500:
 
-            # if berry_ticked == True:
-                # current_time = clock.get_time()
-                # if current_time == stop:
-                #     berry_ticked = False
+            if berry_ticked == True:
+                current_time = clock.get_time()
+                if current_time == stop:
+                    # berry_ticked = False
+                    exit_menu.mainloop(window)
 
                 # attempt to show it on the background
                 # congrats = font2.render("Gratulacje!", True, (0,0,0))
                 # window.blit(congrats, [200,225])
                 # pygame.display.flip()
-
-                exit_menu.mainloop(window)
 
 
         #if the player collides with the bush, we delete the bush and we add berry to the list
