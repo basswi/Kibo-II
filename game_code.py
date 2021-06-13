@@ -255,6 +255,14 @@ class Berry(Physic2):
         self.ycord += self.h_velocity2
         self.xcord += self.v_velocity2
 
+        # checking the time of the tick and setting the stop time
+        global berry_ticked
+        berry_ticked = True
+        if berry_ticked == True:
+            global start, stop
+            start = clock.get_time()
+            stop = start + 500
+
     def draw(self):
         window.blit(self.image, (self.xcord, self.ycord))
 
@@ -332,6 +340,7 @@ class Music:
             pygame.mixer.music.set_volume(0.3)
 
 
+
 #sound library
 step_sound = pygame.mixer.Sound("steps.wav")
 step_sound.set_volume(0.1)
@@ -345,8 +354,8 @@ wolf_sounds[1].set_volume(0.1)
 # choosing the style of the font for texts
 pygame.font.init()
 font = pygame.font.SysFont("gabriola", 20)
+font2 = pygame.font.SysFont("gabriola", 40)
 window = pygame.display.set_mode((500, 500))
-
 
 kibo_bg = Background()
 ground = Background()
@@ -382,6 +391,8 @@ def start_the_game():
         platform_4.platforms(370, 200, 120, 15)
         kibo_bg.bg_image()
 
+        berry_ticked = False
+
         #adding bush to the list
         if bush == 0:
             bushes.append(Bush())
@@ -389,6 +400,21 @@ def start_the_game():
             bush.tick()
         for berry in berries:
             berry.tick()
+            # checking if berry is on the ground
+            if berry.ycord == 500:
+
+            # if berry_ticked == True:
+                # current_time = clock.get_time()
+                # if current_time == stop:
+                #     berry_ticked = False
+
+                # attempt to show it on the background
+                # congrats = font2.render("Gratulacje!", True, (0,0,0))
+                # window.blit(congrats, [200,225])
+                # pygame.display.flip()
+
+                exit_menu.mainloop(window)
+
 
         #if the player collides with the bush, we delete the bush and we add berry to the list
         for bush in bushes:
@@ -407,12 +433,6 @@ def start_the_game():
         enemy.howling()
         victim.draw()
         victim.jump()
-
-        #drawing our bush and our berry
-        for bush in bushes:
-            bush.draw()
-        for berry in berries:
-            berry.draw()
 
         #drawing our bush and our berry
         for bush in bushes:
@@ -486,9 +506,16 @@ main_menu.add.button("Zacznij grę", start_the_intro)
 main_menu.add.selector("Poziom głośności:", [("Max",3),("2",2),("1",1),("0", 0)], onchange = volume.adjust_volume)
 main_menu.add.button("Wyjdź", pygame_menu.events.EXIT)
 
+# defining exit menu options
+exit_menu = pygame_menu.Menu("Menu", 500, 500, theme=pygame_menu.themes.THEME_GREEN)
+exit_menu.add.label("Gratulacje! Zrzuciłeś_aś na wilka trującą jagodę.", font_size = 20)
+exit_menu.add.label("Teraz gołąbek jest wolny!", font_size = 20)
+exit_menu.add.button("Zagraj ponownie", start_the_intro)
+exit_menu.add.selector("Poziom głośności:", [("Max",3),("2",2),("1",1),("0", 0)], onchange = volume.adjust_volume)
+exit_menu.add.button("Wyjdź", pygame_menu.events.EXIT)
+
 # calling menu
 main_menu.mainloop(window)
-
 
 # this line is unnecessary
 # pygame.quit()
